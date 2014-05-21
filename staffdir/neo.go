@@ -19,6 +19,7 @@ type PersonSummary struct {
 	Department string `json:"a.department"`
 	Phone      string `json:"a.phone"`
 	Mobile     string `json:"a.mobile"`
+	Email      string `json:"a.email"`
 }
 
 type PersonDetail struct {
@@ -66,6 +67,7 @@ func (db *Database) ProcessQuery(in string) (qtype string, query string) {
 	if len(query) == 0 {
 		query = in + ".*"
 	}
+	log.Println(query)
 	return
 }
 
@@ -73,7 +75,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 50",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
@@ -97,7 +99,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 		searchTerm = departmentList[searchTerm]
 	}
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a.department =~  {department} RETURN a.name, a.position, a.department, a.phone, a.mobile LIMIT 1000",
+		Statement:  "MATCH (a:Person) WHERE a.department =~  {department} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 1000",
 		Parameters: neoism.Props{"department": "(?i)" + searchTerm},
 		Result:     &[]PersonSummary{},
 	}
@@ -113,7 +115,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 // individual person lookup
 func (db *Database) LookupPerson(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a.email = {email} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus",
+		Statement:  "MATCH (a:Person) WHERE a.email = {email} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.email",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonDetail{},
 	}
@@ -129,7 +131,7 @@ func (db *Database) LookupPerson(query string) (results interface{}, err error) 
 // lookup of a person's manager
 func (db *Database) LookupManager(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile LIMIT 1",
+		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.email, a.mobile, a.email LIMIT 1",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
@@ -145,7 +147,7 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 // lookup of a person's colleagues
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile LIMIT 100",
+		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 100",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
@@ -161,7 +163,7 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 // lookup for a person's direct reports
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile LIMIT 100",
+		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 100",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}

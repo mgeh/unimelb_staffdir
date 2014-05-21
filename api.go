@@ -79,7 +79,7 @@ func main() {
 			temp, _ = json.Marshal(tempOut)
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
-		return string(temp)
+		return 200, string(temp)
 		// var data []string
 		// if strings.Contains(block, "%7C") {
 		// 	data = strings.Split(strings.SplitAfter(r.RequestURI, "/?")[1], "|")
@@ -96,8 +96,7 @@ func main() {
 
 	// process authentication
 	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "/?")[1])
-		fmt.Println(block)
+		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
 		results, ok := db.SearchPeople(block)
 		if ok != nil {
 			log.Fatalln("issue with results")
@@ -113,24 +112,71 @@ func main() {
 			temp, _ = json.Marshal(tempOut)
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
-		return string(temp)
+
+		return 200, string(temp)
 	})
 
 	m.Get("/staffdir/manager", func(res http.ResponseWriter, r *http.Request) (int, string) {
-		block := strings.SplitAfter(r.RequestURI, "/?")[1]
+		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+		results, ok := db.LookupManager(block)
+		if ok != nil {
+			log.Fatalln("issue with results")
+		}
+		out := ProcessResults(results)
+		fmt.Println(out)
+		var temp []byte
+		var tempOut []staffdir.PersonSummary
+		if len(out) > 0 {
+			for _, b := range out {
+				tempOut = append(tempOut, b.(staffdir.PersonSummary))
+			}
+			temp, _ = json.Marshal(tempOut)
+			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
+		}
 
-		return 301, block
+		return 200, string(temp)
 	})
 
 	m.Get("/staffdir/colleagues", func(res http.ResponseWriter, r *http.Request) (int, string) {
-		block := strings.SplitAfter(r.RequestURI, "/?")[1]
-		return 301, block
+		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+		results, ok := db.LookupColleagues(block)
+		if ok != nil {
+			log.Fatalln("issue with results")
+		}
+		out := ProcessResults(results)
+		fmt.Println(out)
+		var temp []byte
+		var tempOut []staffdir.PersonSummary
+		if len(out) > 0 {
+			for _, b := range out {
+				tempOut = append(tempOut, b.(staffdir.PersonSummary))
+			}
+			temp, _ = json.Marshal(tempOut)
+			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
+		}
+
+		return 200, fmt.Sprintf("{\"size\": %d,\"data\": %s}", len(out), temp)
 	})
 
 	m.Get("/staffdir/reports", func(res http.ResponseWriter, r *http.Request) (int, string) {
-		block := strings.SplitAfter(r.RequestURI, "/?")[1]
+		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+		results, ok := db.LookupReports(block)
+		if ok != nil {
+			log.Fatalln("issue with results")
+		}
+		out := ProcessResults(results)
+		fmt.Println(out)
+		var temp []byte
+		var tempOut []staffdir.PersonSummary
+		if len(out) > 0 {
+			for _, b := range out {
+				tempOut = append(tempOut, b.(staffdir.PersonSummary))
+			}
+			temp, _ = json.Marshal(tempOut)
+			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
+		}
 
-		return 301, block
+		return 200, string(temp)
 	})
 
 	m.Patch("/", func() {
@@ -174,7 +220,6 @@ func main() {
 
 	//m.Run()
 	err := http.ListenAndServe(":5001", m)
-	//err := http.ListenAndServeTLS(":8080", "/home/wep/tls/certs/star.its.unimelb.edu.au.chain.crt", "/home/wep/tls/private/star.its.unimelb.edu.au.key", m)
 	if err != nil {
 		log.Fatal(err)
 	}
