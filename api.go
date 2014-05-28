@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	ENDPOINT   = "http://localhost:7474/db/data"
+	ENDPOINT   = "http://uom-staffdir-neo4j.elasticbeanstalk.com:7474/db/data"
 	PERSON     = "Val"
 	EMAIL      = "tania.elliott@unimelb.edu.au"
 	DEPARTMENT = "ITS"
