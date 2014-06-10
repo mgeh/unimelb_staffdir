@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	ENDPOINT = "http://uom-staffdir-neo4j.elasticbeanstalk.com:7474/db/data"
+	ENDPOINT = os.GetEnv(STAFFDIR_DB)
 )
 
 // log to file
