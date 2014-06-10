@@ -2,3 +2,4 @@ clean
 __pycache__
 staffdir/temp
 Dockerfile
+/.zip

@@ -21,11 +21,7 @@ import (
 )
 
 const (
-	ENDPOINT   = "http://uom-staffdir-neo4j.elasticbeanstalk.com:7474/db/data"
-	PERSON     = "Val"
-	EMAIL      = "tania.elliott@unimelb.edu.au"
-	DEPARTMENT = "ITS"
-	PHONE      = "7966"
+	ENDPOINT = "http://uom-staffdir-neo4j.elasticbeanstalk.com:7474/db/data"
 )
 
 // log to file
@@ -62,6 +58,7 @@ func main() {
 	db.Connect(ENDPOINT)
 
 	m.Get("/staffdir/department", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "/?")[1])
 		fmt.Println(block)
 		results, ok := db.SearchDepartment(block)
@@ -80,22 +77,11 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 		return 200, string(temp)
-		// var data []string
-		// if strings.Contains(block, "%7C") {
-		// 	data = strings.Split(strings.SplitAfter(r.RequestURI, "/?")[1], "|")
-		// } else {
-		// 	data = strings.Split(strings.SplitAfter(r.RequestURI, "/?")[1], "|")
-		// }
-		// for a, b := range data {
-		// 	log.Println("d: " + b)
-		// }
-		// output := EncodeJWT(GenDict(data))
-		// ENDPOINT := "https://unimelbit.zendesk.com/access/jwt?jwt="
-		// res.Header().Set("Location", (ENDPOINT + output))
 	})
 
 	// process authentication
 	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
 		results, ok := db.SearchPeople(block)
 		if ok != nil {
@@ -117,6 +103,7 @@ func main() {
 	})
 
 	m.Get("/staffdir/manager", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
 		results, ok := db.LookupManager(block)
 		if ok != nil {
@@ -159,6 +146,7 @@ func main() {
 	})
 
 	m.Get("/staffdir/reports", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
 		results, ok := db.LookupReports(block)
 		if ok != nil {
@@ -182,23 +170,6 @@ func main() {
 	m.Patch("/", func() {
 		// update something
 	})
-
-	// m.Post("/staffdir/ticket", func(r *http.Request, res http.ResponseWriter) (int, string) {
-	// 	ENDPOINT := "https://staff.unimelb.edu.au/its/requests/index#/thankyou/"
-	// 	if err := r.ParseForm(); err != nil {
-	// 		log.Printf("%s", "nothing posted")
-	// 	}
-	// 	data_values := make(map[string]string)
-	// 	for a, b := range r.Form {
-	// 		data_values[a] = b[0]
-	// 	}
-	// 	output := SubmitTicket(data_values)
-	// 	//res.Header().Set("Content-Type", "application/json")
-	// 	// SubmitTicket(data_values)
-	// 	res.Header().Set("Location", (ENDPOINT + output))
-	// 	//return "<html><head><meta http-equiv=\"refresh\" content=\"0;URL=" + (ENDPOINT + output) + "\"></head></html>"
-	// 	return 301, ""
-	// })
 
 	m.Put("/", func() {
 		// replace something
