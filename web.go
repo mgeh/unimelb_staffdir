@@ -8,7 +8,6 @@ package main
 import (
 	"github.com/vly/unimelb_staffdir/staffdir"
 	// "./staffdir"
-	// "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/martini"
@@ -16,7 +15,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
-	// "time"
+	"runtime"
 )
 
 // log to file
@@ -47,6 +46,8 @@ func ProcessResults(t interface{}) []interface{} {
 
 // Main function for the API, starts up martini instance
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
 
 	m := martini.Classic()
