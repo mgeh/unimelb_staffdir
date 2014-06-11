@@ -1,1 +1,1 @@
-web: staffdir
+web: ./web.go
