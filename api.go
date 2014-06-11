@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	ENDPOINT = os.GetEnv(STAFFDIR_DB)
+	ENDPOINT = os.Getenv("STAFFDIR_DB")
 )
 
 // log to file
