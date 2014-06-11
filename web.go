@@ -6,7 +6,7 @@
 package main
 
 import (
-	"./staffdir"
+	"github.com/vly/unimelb_staffdir/staffdir"
 	// "encoding/base64"
 	"encoding/json"
 	"fmt"
