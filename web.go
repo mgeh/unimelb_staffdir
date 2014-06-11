@@ -48,7 +48,7 @@ func ProcessResults(t interface{}) []interface{} {
 
 // Main function for the API, starts up martini instance
 func main() {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL") + "/db/data"
+	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
 
 	m := martini.Classic()
 	fmt.Println("Initialising")
