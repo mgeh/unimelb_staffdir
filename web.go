@@ -7,16 +7,15 @@ package main
 
 import (
 	"github.com/vly/unimelb_staffdir/staffdir"
+	// "./staffdir"
 	// "encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/martini"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"reflect"
-	"strings"
 	// "time"
 )
 
@@ -55,10 +54,12 @@ func main() {
 	db := new(staffdir.Database)
 	db.Connect(ENDPOINT)
 
-	m.Get("/staffdir/department", func(res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "/?")[1])
-		fmt.Println(block)
+		if params["query"] == "" {
+			return 200, ""
+		}
+		block := params["query"]
 		results, ok := db.SearchDepartment(block)
 		if ok != nil {
 			log.Fatalln("issue with results")
@@ -78,11 +79,15 @@ func main() {
 	})
 
 	// process authentication
-	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/person/:name", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
-		results, ok := db.SearchPeople(block)
-		if ok != nil {
+		if params["name"] == "" {
+			return 200, ""
+		}
+		block := params["name"]
+		results, err := db.SearchPeople(block)
+
+		if err != nil {
 			log.Fatalln("issue with results")
 		}
 		out := ProcessResults(results)
@@ -100,9 +105,12 @@ func main() {
 		return 200, string(temp)
 	})
 
-	m.Get("/staffdir/manager", func(res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+		if params["email"] == "" {
+			return 200, ""
+		}
+		block := params["email"]
 		results, ok := db.LookupManager(block)
 		if ok != nil {
 			log.Fatalln("issue with results")
@@ -122,8 +130,12 @@ func main() {
 		return 200, string(temp)
 	})
 
-	m.Get("/staffdir/colleagues", func(res http.ResponseWriter, r *http.Request) (int, string) {
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
+		if params["email"] == "" {
+			return 200, ""
+		}
+		block := params["email"]
 		results, ok := db.LookupColleagues(block)
 		if ok != nil {
 			log.Fatalln("issue with results")
@@ -143,9 +155,12 @@ func main() {
 		return 200, fmt.Sprintf("{\"size\": %d,\"data\": %s}", len(out), temp)
 	})
 
-	m.Get("/staffdir/reports", func(res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
-		block, _ := url.QueryUnescape(strings.SplitAfter(r.RequestURI, "?")[1])
+		if params["email"] == "" {
+			return 200, ""
+		}
+		block := params["email"]
 		results, ok := db.LookupReports(block)
 		if ok != nil {
 			log.Fatalln("issue with results")
