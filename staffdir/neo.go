@@ -31,12 +31,13 @@ type PersonDetail struct {
 	LocCampus        string `json:"a.loc_campus"`
 }
 
-func (db *Database) Connect(hostname string) (database *neoism.Database, ok int) {
+func (db *Database) Connect(hostname string) (database *neoism.Database, ok bool) {
 	database, err := neoism.Connect(hostname)
 	if err != nil {
 		log.Fatal(err)
 	}
 	db.db = database
+	ok = true
 	return
 }
 
