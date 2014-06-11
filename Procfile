@@ -1,1 +1,1 @@
-web: ./web.go -port $PORT
+web: ./web -port $PORT
