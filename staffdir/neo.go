@@ -32,7 +32,7 @@ type PersonDetail struct {
 }
 
 func (db *Database) Connect(hostname string) (database *neoism.Database, ok bool) {
-	database, err := neoism.Connect(hostname)
+	database, err := neoism.Connect(hostname + "/db/data")
 	if err != nil {
 		log.Fatal(err)
 	}
