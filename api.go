@@ -20,10 +20,6 @@ import (
 	// "time"
 )
 
-const (
-	ENDPOINT = os.Getenv("STAFFDIR_DB")
-)
-
 // log to file
 func LogFile(message string) {
 	f, err := os.OpenFile("staffdir_access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
@@ -52,6 +48,8 @@ func ProcessResults(t interface{}) []interface{} {
 
 // Main function for the API, starts up martini instance
 func main() {
+	ENDPOINT := os.Getenv("STAFFDIR_DB")
+
 	m := martini.Classic()
 	fmt.Println("Initialising")
 	db := new(staffdir.Database)
