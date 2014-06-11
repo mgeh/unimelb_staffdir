@@ -188,7 +188,7 @@ func main() {
 	})
 
 	//m.Run()
-	err := http.ListenAndServe(":5001", m)
+	err := http.ListenAndServe(":"+os.Getenv("PORT"), m)
 	if err != nil {
 		log.Fatal(err)
 	}
