@@ -3,13 +3,13 @@ package staffdir
 import (
 	//"encoding/json"
 	// "log"
+	"os"
 	"reflect"
 	"testing"
 )
 
 const (
 	//ENDPOINT   = "http://weapon.its.unimelb.edu.au/db/data"
-	ENDPOINT   = "http://localhost:7474/db/data"
 	PERSON     = "Val"
 	EMAIL      = "tania.elliott@unimelb.edu.au"
 	DEPARTMENT = "ITS"
@@ -18,6 +18,7 @@ const (
 
 // TestConnectNeo checks the Neo4j DB connection functionality
 func TestConnectNeo(t *testing.T) {
+	ENDPOINT := os.Getenv("GRAPHENEDB_URL") + "/db/data"
 	db := new(Database)
 	_, ok := db.Connect(ENDPOINT)
 	//verify there are no errors
