@@ -85,8 +85,8 @@ func TestProcessName(t *testing.T) {
 	// Test results
 	tests := map[string]string{
 		"val l":  "val.* l.*",
-		"val":    "(^| )val.*",
-		"lyasho": "(^| )lyasho.*",
+		"val":    "(^|.* )val.*",
+		"lyasho": "(^|.* )lyasho.*",
 	}
 
 	for a, b := range tests {

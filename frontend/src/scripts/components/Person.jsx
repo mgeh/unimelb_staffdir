@@ -19,12 +19,11 @@ var Person = React.createClass({
   render: function () {
   	var scope = this;
   	function clickOn(email){
-  		console.log(scope.props.person["a.email"]);
+  		console.log();
   		React.renderComponent(
 			  React.DOM.div(
 			    null,
-			    React.DOM.h1(null, scope.props.person["a.name"]),
-			    React.DOM.p(null, scope.props.person["a.email"])
+			    <Details person={scope.props.person}/>
 			  ),
 			  document.body
 			);

@@ -12,7 +12,7 @@ var PersonList = React.createClass({
   render: function () {
   	var people = this.props.results.map(function(person) {
       // console.log(person);
-  		return <Person person={person} />
+  		return <Person key={person['email']} person={person} />
   	});
     return (
         <div>

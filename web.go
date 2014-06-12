@@ -157,7 +157,7 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
-		return 200, fmt.Sprintf("{\"size\": %d,\"data\": %s}", len(out), temp)
+		return 200, string(temp)
 	})
 
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
