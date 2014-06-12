@@ -68,7 +68,6 @@ var PersonDetails = React.createClass({
 
 
     return (
-        
 			    <div>
 			    	<h2>{this.props.person["a.name"]}</h2>
 			    	<p>Email: {this.props.person["a.email"]}</p>
@@ -76,6 +75,7 @@ var PersonDetails = React.createClass({
 			    	<p>Manager: {manager}</p>
 			    	<p>Colleagues: {colleagues} </p>
 			    	<p>Reports: {reports}</p>
+			    	<p>{scope.state.manager}</p>
 			    </div>
       );
   }
