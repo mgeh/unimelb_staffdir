@@ -56,6 +56,7 @@ func main() {
 	db.Connect(ENDPOINT)
 
 	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		if params["query"] == "" {
 			return 200, ""
@@ -81,6 +82,7 @@ func main() {
 
 	// process authentication
 	m.Get("/staffdir/person/:name", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		if params["name"] == "" {
 			return 200, ""
@@ -107,6 +109,7 @@ func main() {
 	})
 
 	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		if params["email"] == "" {
 			return 200, ""
@@ -132,6 +135,7 @@ func main() {
 	})
 
 	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		if params["email"] == "" {
 			return 200, ""
@@ -157,6 +161,7 @@ func main() {
 	})
 
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		if params["email"] == "" {
 			return 200, ""
@@ -199,7 +204,6 @@ func main() {
 
 	m.NotFound(func() string {
 		// handle 404
-		log.Printf("%s\n", "Yep...")
 		return "Something went wrong."
 	})
 
