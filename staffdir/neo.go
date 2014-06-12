@@ -49,7 +49,7 @@ func (db *Database) ProcessName(in string) (out string) {
 		out = strings.Join(parts, ".* ")
 		out += ".*"
 	} else {
-		out = "(^| )" + in + ".*"
+		out = "(^|.* )" + in + ".*"
 	}
 	return
 }

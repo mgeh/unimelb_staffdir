@@ -1,13 +1,17 @@
 {
   "name": "staffdir",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "src": "src",
   "test": "test",
   "dist": "dist",
   "mainInput": "StaffdirApp",
   "mainOutput": "main",
   "dependencies": {
-    "react": "~0.10.0"
+    "react": "~0.10.0",
+    "react-router-component": "latest",
+    "react-async": "latest",
+    "url-pattern": "latest",
+    "json5": "latest"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

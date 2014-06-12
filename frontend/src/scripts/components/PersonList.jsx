@@ -11,7 +11,8 @@ var Person = require("./Person.jsx");
 var PersonList = React.createClass({
   render: function () {
   	var people = this.props.results.map(function(person) {
-  		return <Person name={person.name} />
+      // console.log(person);
+  		return <Person person={person} />
   	});
     return (
         <div>

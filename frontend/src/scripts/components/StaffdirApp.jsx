@@ -5,6 +5,8 @@
 'use strict';
 
 var React = require('react/addons');
+// var Router = require('react-router-component')
+
 var ReactTransitionGroup = React.addons.TransitionGroup;
 
 // CSS
@@ -16,38 +18,35 @@ var Searchbox = require("./Searchbox.jsx");
 var Results = require("./Results.jsx");
 
 var imageURL = '../../images/yeoman.png';
-
-var results = [
-  {name: 'Val Lyashov', dep: 'ITS'},
-  {name: 'Tom Stringer', dep: 'ITS'}
-];
-
+var url_base = 'http://uom-staffdir.herokuapp.com/staffdir/person/';
 
 var StaffdirApp = React.createClass({
 
-	getData: function(query){
+	handleSubmit: function(e){
+		// this..preventDefault();
 		$.ajax({
-		      url: 'http://uom-13melb.herokuapp.com/area/159',
-		      dataType: 'json',
-		      data: query,
-		      success: function(data) {
-		        this.setState({data: query});
-		      }.bind(this),
-		      error: function(xhr, status, err) {
-		        console.error(this.props.url, status, err.toString());
-		      }.bind(this)
-		})
+			url: url_base + e,
+			dataType: "json",
+			success: function (data) {
+				this.setState({results: data});
+				// console.log(this.state.results);
+			}.bind(this)
+		});
+	},
+	getInitialState: function(){
+		return {results:[]}
 	},
   render: function() {
+  	
     return (
       <div className='main'>
-        <Searchbox />
-        <Results results={this.props.results} />
+        <Searchbox results={this.state.results} getData={this.handleSubmit} />
+        <Results results={this.state.results}  />
       </div>
 
     );
   }
 });
 
-React.renderComponent(<StaffdirApp results={results}/>, document.getElementById('content')); // jshint ignore:line
+React.renderComponent(<StaffdirApp />, document.getElementById('content')); // jshint ignore:line
 module.exports = StaffdirApp;

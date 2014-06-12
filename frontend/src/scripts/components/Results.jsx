@@ -8,7 +8,6 @@ var React = require('react/addons');
 require('../../styles/Results.css');
 var PersonList = require("./PersonList.jsx");
 
-
 var Results = React.createClass({
   render: function () {
     return (
