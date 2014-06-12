@@ -53,6 +53,7 @@ func main() {
 	m := martini.Classic()
 	fmt.Println("Initialising")
 	db := new(staffdir.Database)
+	db.Connect(ENDPOINT)
 
 	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
@@ -183,6 +184,22 @@ func main() {
 		}
 
 		return 200, string(temp)
+	})
+
+	m.Patch("/", func() {
+		// update something
+	})
+
+	m.Put("/", func() {
+		// replace something
+	})
+
+	m.Delete("/", func() {
+		// destroy something
+	})
+
+	m.Options("/", func() {
+		// http options
 	})
 
 	m.NotFound(func() string {

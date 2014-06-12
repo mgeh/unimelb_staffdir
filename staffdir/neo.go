@@ -84,6 +84,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	// db.Session.Log = true
 	db.db.Cypher(&cq)
 	results = cq.Result
+	log.Println(results)
 	if results == nil {
 		err = errors.New("No results returned")
 	}
