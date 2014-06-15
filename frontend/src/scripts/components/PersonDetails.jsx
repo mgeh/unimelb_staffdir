@@ -45,25 +45,28 @@ var PersonDetails = React.createClass({
 		});
 	},
 
+	componentWillMount : function() {
+		this.getColleagues();
+	  	this.getReports();
+	 	this.getManager();
+	},
+
   render: function () {
   	var scope = this;
-  	this.getColleagues();
-  	this.getReports();
-  	this.getManager();
-
+  	
   	var colleagues = this.state.colleagues.map(function(colleague) {
-      console.log(colleague);
-  		return <Person key={colleague['email']} person={colleague} />
+      	console.log(colleague);
+  		return <div>{colleague} </div>;
   	});
 
-  	var manager = this.state.manager.map(function(manager) {
-      console.log(manager);
-  		return <Person key={manager['email']} person={manager} />
+  	var managers = this.state.manager.map(function(manager) {
+  		console.log(manager);
+  		return (<div>{manager}</div>);
   	});
 
   	var reports = this.state.reports.map(function(report) {
       console.log(report);
-  		return <Person key={report['email']} person={report} />
+  		return <div>{report} </div>;
   	});
 
 
@@ -72,10 +75,9 @@ var PersonDetails = React.createClass({
 			    	<h2>{this.props.person["a.name"]}</h2>
 			    	<p>Email: {this.props.person["a.email"]}</p>
 			    	<p>Phone: {this.props.person["a.phone"]}</p>
-			    	<p>Manager: {manager}</p>
-			    	<p>Colleagues: {colleagues} </p>
+			    	<p>Manager: {managers}</p>
+			    	<p>Colleagues:  {colleagues}</p>
 			    	<p>Reports: {reports}</p>
-			    	<p>{scope.state.manager}</p>
 			    </div>
       );
   }
