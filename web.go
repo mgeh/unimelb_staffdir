@@ -48,7 +48,7 @@ func ProcessResults(t interface{}) []interface{} {
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 
 	m := martini.Classic()
 	fmt.Println("Initialising")
