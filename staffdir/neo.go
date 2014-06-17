@@ -135,7 +135,7 @@ func (db *Database) LookupPerson(query string) (results interface{}, err error) 
 // lookup of a person's manager
 func (db *Database) LookupManager(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.email, a.mobile, a.email LIMIT 1",
+		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.email, a.mobile LIMIT 1",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
