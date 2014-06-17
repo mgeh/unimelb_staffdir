@@ -192,7 +192,7 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
-		return 200, fmt.Sprintf("{'size': %d, 'data': %s}", len(temp), string(temp))
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
 	m.Patch("/", func() {
