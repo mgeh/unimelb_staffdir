@@ -200,7 +200,14 @@ func main() {
 
 	m.Options("/", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
-		// http options
+	})
+
+	m.Options("/staffdir/colleagues/:val", func(res http.ResponseWriter) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
+	})
+
+	m.Options("/staffdir/person/:val", func(res http.ResponseWriter) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 	})
 
 	m.NotFound(func() string {
