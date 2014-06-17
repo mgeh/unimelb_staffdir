@@ -215,13 +215,13 @@ func main() {
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
-	m.Get("/staffdir/details/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/details/:id", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
-		if params["email"] == "" {
+		if params["id"] == "" {
 			return 200, ""
 		}
-		block := params["email"] + "@unimelb.edu.au"
+		block := params["id"]
 		person, err := db.LookupPerson(block)
 		manager, ok := db.LookupManager(block)
 		colleagues, ok := db.LookupColleagues(block)

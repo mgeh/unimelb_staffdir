@@ -20,7 +20,9 @@ type PersonSummary struct {
 	Phone      string `json:"a.phone"`
 	Mobile     string `json:"a.mobile"`
 	Email      string `json:"a.email"`
+	PrefName   string `json:"a.pref_name"`
 	Gender     string `json:"a.gender"`
+	Id         string `json:"a.id"`
 }
 
 type PersonDetail struct {
@@ -30,6 +32,10 @@ type PersonDetail struct {
 	Department       string `json:"a.department"`
 	DepartmentNumber string `json:"a.department_number"`
 	LocCampus        string `json:"a.loc_campus"`
+	Phone            string `json:"a.phone"`
+	Mobile           string `json:"a.mobile"`
+	Email            string `json:"a.email"`
+	PrefName         string `json:"a.pref_name"`
 }
 
 func (db *Database) Connect(hostname string) (database *neoism.Database, ok bool) {
@@ -78,7 +84,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 50",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
@@ -119,8 +125,8 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 // individual person lookup
 func (db *Database) LookupPerson(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a.email = {email} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.email",
-		Parameters: neoism.Props{"email": query},
+		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.phone, a.mobile, a.email, a.pref_name",
+		Parameters: neoism.Props{"id": query},
 		Result:     &[]PersonDetail{},
 	}
 	// db.Session.Log = true
@@ -135,7 +141,7 @@ func (db *Database) LookupPerson(query string) (results interface{}, err error) 
 // lookup of a person's manager
 func (db *Database) LookupManager(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.email, a.mobile LIMIT 1",
+		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 1",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
@@ -151,7 +157,7 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 // lookup of a person's colleagues
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 100",
+		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
@@ -167,7 +173,7 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 // lookup for a person's direct reports
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 100",
+		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE b.email = {email} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
 		Parameters: neoism.Props{"email": query},
 		Result:     &[]PersonSummary{},
 	}
