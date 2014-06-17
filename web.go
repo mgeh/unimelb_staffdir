@@ -37,11 +37,37 @@ func ProcessResults(t interface{}) []interface{} {
 	for i := 0; i < z.Len(); i++ {
 		s[i] = z.Index(i).Interface()
 	}
-	// for _, n := range s {
-	//  temp, _ := json.Marshal(n.(PersonSummary))
-	//  fmt.Println(string(temp))
-	// }
 	return s
+}
+
+// Output json blob
+func ProcessSummaries(t []interface{}) string {
+	out := ProcessResults(t)
+	fmt.Println(out)
+	var temp []byte
+	var tempOut []staffdir.PersonSummary
+	if len(out) > 0 {
+		for _, b := range out {
+			tempOut = append(tempOut, b.(staffdir.PersonSummary))
+		}
+		temp, _ = json.Marshal(tempOut)
+	}
+	return string(temp)
+}
+
+// Output json blob
+func ProcessDetails(t []interface{}) string {
+	out := ProcessResults(t)
+	fmt.Println(out)
+	var temp []byte
+	var tempOut []staffdir.PersonDetail
+	if len(out) > 0 {
+		for _, b := range out {
+			tempOut = append(tempOut, b.(staffdir.PersonDetail))
+		}
+		temp, _ = json.Marshal(tempOut)
+	}
+	return string(temp)
 }
 
 // preflight headers
@@ -49,7 +75,6 @@ func ProcessResults(t interface{}) []interface{} {
 func SetHeaders(res *http.ResponseWriter) *http.ResponseWriter {
 	(*res).Header().Set("Access-Control-Allow-Origin", "*")
 	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	// (*res).Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 	return res
 }
 
@@ -84,7 +109,6 @@ func main() {
 				tempOut = append(tempOut, b.(staffdir.PersonSummary))
 			}
 			temp, _ = json.Marshal(tempOut)
-			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
@@ -111,7 +135,6 @@ func main() {
 				tempOut = append(tempOut, b.(staffdir.PersonSummary))
 			}
 			temp, _ = json.Marshal(tempOut)
-			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
@@ -137,7 +160,6 @@ func main() {
 				tempOut = append(tempOut, b.(staffdir.PersonSummary))
 			}
 			temp, _ = json.Marshal(tempOut)
-			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
@@ -163,7 +185,6 @@ func main() {
 				tempOut = append(tempOut, b.(staffdir.PersonSummary))
 			}
 			temp, _ = json.Marshal(tempOut)
-			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
@@ -189,22 +210,32 @@ func main() {
 				tempOut = append(tempOut, b.(staffdir.PersonSummary))
 			}
 			temp, _ = json.Marshal(tempOut)
-			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
-	m.Patch("/", func() {
-		// update something
-	})
+	m.Get("/staffdir/details/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
+		SetHeaders(&res)
+		if params["email"] == "" {
+			return 200, ""
+		}
+		block := params["email"] + "@unimelb.edu.au"
+		person, err := db.LookupPerson(block)
+		manager, ok := db.LookupManager(block)
+		colleagues, ok := db.LookupColleagues(block)
+		reports, ok := db.LookupReports(block)
 
-	m.Put("/", func() {
-		// replace something
-	})
+		if ok != nil {
+			log.Fatalln("issue with results")
+		}
+		personOut := ProcessDetails(person)
+		managerOut := ProcessSummaries(manager)
+		colleaguesOut := ProcessSummaries(colleagues)
+		reportsOut := ProcessSummaries(reports)
 
-	m.Delete("/", func() {
-		// destroy something
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": {\"person\": %s, \"manager\": %s, \"colleagues\": %s, \"reports\": %s}}", len(out), personOut, managerOut, colleaguesOut, reportsOut)
 	})
 
 	m.Options("/", func(res http.ResponseWriter) {
@@ -224,7 +255,6 @@ func main() {
 		return "Something went wrong."
 	})
 
-	//m.Run()
 	err := http.ListenAndServe(":"+os.Getenv("PORT"), m)
 	if err != nil {
 		log.Fatal(err)

@@ -20,6 +20,7 @@ type PersonSummary struct {
 	Phone      string `json:"a.phone"`
 	Mobile     string `json:"a.mobile"`
 	Email      string `json:"a.email"`
+	Gender     string `json:"a.gender"`
 }
 
 type PersonDetail struct {
