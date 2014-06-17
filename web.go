@@ -86,7 +86,7 @@ func main() {
 			temp, _ = json.Marshal(tempOut)
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
-		return 200, fmt.Sprintf("{'size': %d, 'data': %s}", len(temp), string(temp))
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
 	// process authentication
@@ -114,7 +114,7 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
-		return 200, fmt.Sprintf("{'size': %d, 'data': %s}", len(temp), string(temp))
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
 	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
@@ -140,7 +140,7 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
-		return 200, fmt.Sprintf("{'size': %d, 'data': %s}", len(temp), string(temp))
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
 	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
@@ -166,7 +166,7 @@ func main() {
 			//temp, _ := json.Marshal(out[0].(staffdir.PersonSummary))
 		}
 
-		return 200, fmt.Sprintf("{'size': %d, 'data': %s}", len(temp), string(temp))
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
