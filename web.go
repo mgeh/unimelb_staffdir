@@ -44,6 +44,15 @@ func ProcessResults(t interface{}) []interface{} {
 	return s
 }
 
+// preflight headers
+
+func SetHeaders(res *http.ResponseWriter) *http.ResponseWriter {
+	(*res).Header().Set("Access-Control-Allow-Origin", "*")
+	(*res).Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	// (*res).Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+	return res
+}
+
 // Main function for the API, starts up martini instance
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -57,9 +66,7 @@ func main() {
 
 	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 		if params["query"] == "" {
 			return 200, ""
 		}
@@ -85,9 +92,7 @@ func main() {
 	// process authentication
 	m.Get("/staffdir/person/:name", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 		if params["name"] == "" {
 			return 200, ""
 		}
@@ -114,9 +119,7 @@ func main() {
 
 	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -142,9 +145,7 @@ func main() {
 
 	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -170,9 +171,7 @@ func main() {
 
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -209,21 +208,15 @@ func main() {
 	})
 
 	m.Options("/", func(res http.ResponseWriter) {
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 	})
 
 	m.Options("/staffdir/colleagues/:val", func(res http.ResponseWriter) {
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 	})
 
 	m.Options("/staffdir/person/:val", func(res http.ResponseWriter) {
-		res.Header().Set("Access-Control-Allow-Origin", "*")
-		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
+		SetHeaders(&res)
 	})
 
 	m.NotFound(func() string {
