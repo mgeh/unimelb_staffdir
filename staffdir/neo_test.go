@@ -141,8 +141,8 @@ func TestLookupPerson(t *testing.T) {
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{
-		"tania.elliott@unimelb.edu.au": "Tania Elliott",
-		"val.lyashov@unimelb.edu.au":   "Val Lyashov",
+		"15504": "Tania Elliott",
+		"546":   "Val Lyashov",
 	}
 	for a, b := range tests {
 		results, err := db.LookupPerson(a)
@@ -163,8 +163,8 @@ func TestLookupManager(t *testing.T) {
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{
-		"tania.elliott@unimelb.edu.au": "Sendur Kathirgamanathan",
-		"val.lyashov@unimelb.edu.au":   "Tania Elliott",
+		"15504": "Sendur Kathirgamanathan",
+		"546":   "Tania Elliott",
 	}
 	for a, b := range tests {
 		results, err := db.LookupManager(a)
@@ -206,8 +206,7 @@ func TestLookupReports(t *testing.T) {
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{
-		"tania.elliott@unimelb.edu.au": "Val Lyashov",
-		"val.lyashov@unimelb.edu.au":   "",
+		"15504": "Val Lyashov",
 	}
 	for a, b := range tests {
 		results, err := db.LookupReports(a)
