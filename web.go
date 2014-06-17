@@ -58,6 +58,8 @@ func main() {
 	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 		if params["query"] == "" {
 			return 200, ""
 		}
@@ -84,6 +86,8 @@ func main() {
 	m.Get("/staffdir/person/:name", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 		if params["name"] == "" {
 			return 200, ""
 		}
@@ -111,6 +115,8 @@ func main() {
 	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -137,6 +143,8 @@ func main() {
 	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -163,6 +171,8 @@ func main() {
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 		if params["email"] == "" {
 			return 200, ""
 		}
