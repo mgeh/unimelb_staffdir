@@ -59,7 +59,7 @@ func main() {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 		if params["query"] == "" {
 			return 200, ""
 		}
@@ -87,7 +87,7 @@ func main() {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 		if params["name"] == "" {
 			return 200, ""
 		}
@@ -116,7 +116,7 @@ func main() {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -144,7 +144,7 @@ func main() {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -172,7 +172,7 @@ func main() {
 		db.Connect(ENDPOINT)
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 		if params["email"] == "" {
 			return 200, ""
 		}
@@ -211,19 +211,19 @@ func main() {
 	m.Options("/", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 	})
 
 	m.Options("/staffdir/colleagues/:val", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 	})
 
 	m.Options("/staffdir/person/:val", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
 		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		res.Header().Set("Access-Control-Allow-Headers", "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type")
 	})
 
 	m.NotFound(func() string {
