@@ -41,7 +41,7 @@ func ProcessResults(t interface{}) []interface{} {
 }
 
 // Output json blob
-func ProcessSummaries(t []interface{}) string {
+func ProcessSummaries(t interface{}) string {
 	out := ProcessResults(t)
 	fmt.Println(out)
 	var temp []byte
@@ -56,7 +56,7 @@ func ProcessSummaries(t []interface{}) string {
 }
 
 // Output json blob
-func ProcessDetails(t []interface{}) string {
+func ProcessDetails(t interface{}) string {
 	out := ProcessResults(t)
 	fmt.Println(out)
 	var temp []byte
@@ -227,7 +227,7 @@ func main() {
 		colleagues, ok := db.LookupColleagues(block)
 		reports, ok := db.LookupReports(block)
 
-		if ok != nil {
+		if ok != nil || err != nil {
 			log.Fatalln("issue with results")
 		}
 		personOut := ProcessDetails(person)
@@ -235,7 +235,7 @@ func main() {
 		colleaguesOut := ProcessSummaries(colleagues)
 		reportsOut := ProcessSummaries(reports)
 
-		return 200, fmt.Sprintf("{\"size\": %d, \"data\": {\"person\": %s, \"manager\": %s, \"colleagues\": %s, \"reports\": %s}}", len(out), personOut, managerOut, colleaguesOut, reportsOut)
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": {\"person\": %s, \"manager\": %s, \"colleagues\": %s, \"reports\": %s}}", 1, personOut, managerOut, colleaguesOut, reportsOut)
 	})
 
 	m.Options("/", func(res http.ResponseWriter) {
