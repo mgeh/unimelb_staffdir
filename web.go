@@ -200,14 +200,20 @@ func main() {
 
 	m.Options("/", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 	})
 
 	m.Options("/staffdir/colleagues/:val", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 	})
 
 	m.Options("/staffdir/person/:val", func(res http.ResponseWriter) {
 		res.Header().Set("Access-Control-Allow-Origin", "*")
+		res.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		res.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
 	})
 
 	m.NotFound(func() string {
