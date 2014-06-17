@@ -198,7 +198,8 @@ func main() {
 		// destroy something
 	})
 
-	m.Options("/", func() {
+	m.Options("/", func(res http.ResponseWriter) {
+		res.Header().Set("Access-Control-Allow-Origin", "*")
 		// http options
 	})
 
