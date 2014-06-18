@@ -144,7 +144,7 @@ func (db *Database) LookupPerson(query string) (results interface{}, err error) 
 func (db *Database) LookupManager(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 1",
+		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 1",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
@@ -161,7 +161,7 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
+		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
@@ -178,7 +178,7 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
+		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
