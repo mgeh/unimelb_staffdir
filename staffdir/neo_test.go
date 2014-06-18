@@ -3,7 +3,6 @@ package staffdir
 import (
 	//"encoding/json"
 	// "log"
-	"log"
 	"os"
 	"reflect"
 	"testing"
