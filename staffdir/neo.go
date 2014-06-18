@@ -33,6 +33,9 @@ type PersonDetail struct {
 	Department       string `json:"a.department"`
 	DepartmentNumber string `json:"a.department_number"`
 	LocCampus        string `json:"a.loc_campus"`
+	LocBuilding      string `json:"a.loc_building"`
+	LocFloor         string `json:"a.loc_floor"`
+	LocRoom          string `json:"a.loc_room"`
 	Phone            string `json:"a.phone"`
 	Mobile           string `json:"a.mobile"`
 	Email            string `json:"a.email"`
@@ -85,7 +88,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 50",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
@@ -127,7 +130,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 func (db *Database) LookupPerson(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.phone, a.mobile, a.email, a.pref_name",
+		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.loc_building, a.loc_floor, a.loc_room, a.phone, a.mobile, a.email, a.pref_name",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonDetail{},
 	}
@@ -161,7 +164,7 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
+		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
@@ -178,7 +181,7 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
+		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}

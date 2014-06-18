@@ -6,8 +6,8 @@
 package main
 
 import (
-	"github.com/vly/unimelb_staffdir/staffdir"
-	// "./staffdir"
+	// "github.com/vly/unimelb_staffdir/staffdir"
+	"./staffdir"
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/martini"
@@ -16,6 +16,7 @@ import (
 	"os"
 	"reflect"
 	"runtime"
+	"strings"
 )
 
 // log to file
@@ -28,6 +29,29 @@ func LogFile(message string) {
 
 	log.SetOutput(f)
 	log.Println(message)
+}
+
+// Clean names
+func CleanNameDetails(b interface{}) staffdir.PersonDetail {
+	k := b.(staffdir.PersonDetail)
+	nameTemp := strings.Split(k.Name, " ")
+	if len(k.PrefName) > 1 {
+		k.Name = fmt.Sprintf("%s %s", k.PrefName, nameTemp[len(nameTemp)-1])
+	} else if len(nameTemp) > 2 {
+		k.Name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
+	}
+	return k
+}
+
+func CleanNameSummary(b interface{}) staffdir.PersonSummary {
+	k := b.(staffdir.PersonSummary)
+	nameTemp := strings.Split(k.Name, " ")
+	if len(k.PrefName) > 1 {
+		k.Name = fmt.Sprintf("%s %s", k.PrefName, nameTemp[len(nameTemp)-1])
+	} else if len(nameTemp) > 2 {
+		k.Name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
+	}
+	return k
 }
 
 // Convert returned neo4j results to structs
@@ -48,7 +72,8 @@ func ProcessSummaries(t interface{}) string {
 	var tempOut []staffdir.PersonSummary
 	if len(out) > 0 {
 		for _, b := range out {
-			tempOut = append(tempOut, b.(staffdir.PersonSummary))
+			k := CleanNameSummary(b)
+			tempOut = append(tempOut, k)
 		}
 		temp, _ = json.Marshal(tempOut)
 	}
@@ -63,7 +88,8 @@ func ProcessDetails(t interface{}) string {
 	var tempOut []staffdir.PersonDetail
 	if len(out) > 0 {
 		for _, b := range out {
-			tempOut = append(tempOut, b.(staffdir.PersonDetail))
+			k := CleanNameDetails(b)
+			tempOut = append(tempOut, k)
 		}
 		temp, _ = json.Marshal(tempOut)
 	}
