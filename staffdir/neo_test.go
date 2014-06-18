@@ -3,6 +3,7 @@ package staffdir
 import (
 	//"encoding/json"
 	// "log"
+	"log"
 	"os"
 	"reflect"
 	"testing"
@@ -18,7 +19,7 @@ const (
 
 // TestConnectNeo checks the Neo4j DB connection functionality
 func TestConnectNeo(t *testing.T) {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 	db := new(Database)
 	_, ok := db.Connect(ENDPOINT)
 	//verify there are no errors
@@ -47,7 +48,7 @@ func ProcessResults(t interface{}) []interface{} {
 
 // Test main staff search functionality
 func TestSearchPeople(t *testing.T) {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 	db := new(Database)
 	db.Connect(ENDPOINT)
 
@@ -137,7 +138,7 @@ func TestProcessName(t *testing.T) {
 
 // Test individual person lookup
 func TestLookupPerson(t *testing.T) {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{
@@ -149,8 +150,10 @@ func TestLookupPerson(t *testing.T) {
 		if err != nil {
 			t.Fail()
 		}
-		temp := ProcessResults(results)[0]
-		if b != temp.(PersonDetail).Name {
+		temp := ProcessResults(results)
+		if len(temp) == 0 {
+			t.Fail()
+		} else if b != temp[0].(PersonDetail).Name {
 			t.Fail()
 		}
 
@@ -159,7 +162,7 @@ func TestLookupPerson(t *testing.T) {
 
 // Test lookup of a person's manager
 func TestLookupManager(t *testing.T) {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{
@@ -202,7 +205,7 @@ func TestLookupManager(t *testing.T) {
 
 // Test lookup for a person's direct reports
 func TestLookupReports(t *testing.T) {
-	ENDPOINT := os.Getenv("GRAPHENEDB_URL")
+	ENDPOINT := os.Getenv("NEO4J_URL")
 	db := new(Database)
 	db.Connect(ENDPOINT)
 	tests := map[string]string{

@@ -5,6 +5,7 @@ import (
 	"github.com/jmcvetta/neoism"
 	"log"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -109,7 +110,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 		searchTerm = departmentList[searchTerm]
 	}
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a.department =~  {department} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 1000",
+		Statement:  "MATCH (a:Person) WHERE a.department =~ {department} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 1000",
 		Parameters: neoism.Props{"department": "(?i)" + searchTerm},
 		Result:     &[]PersonSummary{},
 	}
@@ -124,9 +125,10 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 
 // individual person lookup
 func (db *Database) LookupPerson(query string) (results interface{}, err error) {
+	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
 		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.phone, a.mobile, a.email, a.pref_name",
-		Parameters: neoism.Props{"id": query},
+		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonDetail{},
 	}
 	// db.Session.Log = true
@@ -140,9 +142,10 @@ func (db *Database) LookupPerson(query string) (results interface{}, err error) 
 
 // lookup of a person's manager
 func (db *Database) LookupManager(query string) (results interface{}, err error) {
+	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
 		Statement:  "MATCH (a:Person)-[:MANAGES]->(b:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 1",
-		Parameters: neoism.Props{"id": query},
+		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
 	// db.Session.Log = true
@@ -156,9 +159,10 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 
 // lookup of a person's colleagues
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
+	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
 		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
-		Parameters: neoism.Props{"id": query},
+		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
 	// db.Session.Log = true
@@ -172,9 +176,10 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 
 // lookup for a person's direct reports
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
+	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
 		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 100",
-		Parameters: neoism.Props{"id": query},
+		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
 	// db.Session.Log = true
