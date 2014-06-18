@@ -39,6 +39,7 @@ type PersonDetail struct {
 	Phone            string `json:"a.phone"`
 	Mobile           string `json:"a.mobile"`
 	Email            string `json:"a.email"`
+	Gender           string `json:"a.gender"`
 	PrefName         string `json:"a.pref_name"`
 }
 
@@ -130,7 +131,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 func (db *Database) LookupPerson(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.loc_building, a.loc_floor, a.loc_room, a.phone, a.mobile, a.email, a.pref_name",
+		Statement:  "MATCH (a:Person) WHERE id(a) = {id} RETURN a.name, a.position, a.position_group, a.department, a.department_number, a.loc_campus, a.loc_building, a.loc_floor, a.loc_room, a.phone, a.mobile, a.email, a.gender, a.pref_name",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonDetail{},
 	}
