@@ -114,13 +114,15 @@ func main() {
 	})
 
 	// process authentication
-	m.Get("/staffdir/person/:name", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
-		if params["name"] == "" {
+		block := ""
+		if r.FormValue("q") != "" {
+			block = r.FormValue("q")
+		} else {
 			return 200, ""
 		}
-		block := params["name"]
 		results, err := db.SearchPeople(block)
 
 		if err != nil {
@@ -215,13 +217,15 @@ func main() {
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
-	m.Get("/staffdir/details/:id", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+	m.Get("/staffdir/details", func(res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
-		if params["id"] == "" {
+		block := ""
+		if r.FormValue("id") != "" {
+			block = r.FormValue("id")
+		} else {
 			return 200, ""
 		}
-		block := params["id"]
 		person, err := db.LookupPerson(block)
 		manager, ok := db.LookupManager(block)
 		colleagues, ok := db.LookupColleagues(block)
