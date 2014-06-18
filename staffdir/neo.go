@@ -23,7 +23,7 @@ type PersonSummary struct {
 	Email      string `json:"a.email"`
 	PrefName   string `json:"a.pref_name"`
 	Gender     string `json:"a.gender"`
-	Id         string `json:"a.id"`
+	Id         int    `json:"pid"`
 }
 
 type PersonDetail struct {
@@ -85,7 +85,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 50",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
