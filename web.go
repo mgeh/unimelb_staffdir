@@ -242,8 +242,9 @@ func main() {
 		if len(reportsOut) > 1 {
 			output += fmt.Sprintf(", \"reports\": %s", reportsOut)
 		}
+		log.Println(output)
 
-		return 200, output + "}"
+		return 200, output + "}}"
 	})
 
 	m.Options("/", func(res http.ResponseWriter) {
