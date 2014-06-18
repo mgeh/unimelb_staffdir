@@ -6,8 +6,8 @@
 package main
 
 import (
-	// "github.com/vly/unimelb_staffdir/staffdir"
-	"./staffdir"
+	"github.com/vly/unimelb_staffdir/staffdir"
+	// "./staffdir"
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/martini"
