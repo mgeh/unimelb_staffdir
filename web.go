@@ -160,7 +160,8 @@ func main() {
 		var tempOut []staffdir.PersonSummary
 		if len(out) > 0 {
 			for _, b := range out {
-				tempOut = append(tempOut, b.(staffdir.PersonSummary))
+				k := CleanNameSummary(b)
+				tempOut = append(tempOut, k)
 			}
 			temp, _ = json.Marshal(tempOut)
 		}
