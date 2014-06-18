@@ -235,7 +235,15 @@ func main() {
 		colleaguesOut := ProcessSummaries(colleagues)
 		reportsOut := ProcessSummaries(reports)
 
-		return 200, fmt.Sprintf("{\"size\": %d, \"data\": {\"person\": %s, \"manager\": %s, \"colleagues\": %s, \"reports\": %s}}", 1, personOut, managerOut, colleaguesOut, reportsOut)
+		output := fmt.Sprintf("{\"size\": %d, \"data\": {\"person\": %s, \"manager\": %s", 1, personOut, managerOut)
+		if len(colleaguesOut) > 1 {
+			output += fmt.Sprintf(", \"colleagues\": %s", colleaguesOut)
+		}
+		if len(reportsOut) > 1 {
+			output += fmt.Sprintf(", \"reports\": %s", reportsOut)
+		}
+
+		return 200, output + "}"
 	})
 
 	m.Options("/", func(res http.ResponseWriter) {
