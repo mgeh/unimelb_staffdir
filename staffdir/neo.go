@@ -89,7 +89,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid ORDER BY a.position DESC, a.name LIMIT 50",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
@@ -114,7 +114,7 @@ func (db *Database) SearchDepartment(query string) (results interface{}, err err
 		searchTerm = departmentList[searchTerm]
 	}
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a.department =~ {department} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email LIMIT 1000",
+		Statement:  "MATCH (a:Person) WHERE a.department =~ {department} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email ORDER BY a.position DESC, a.name LIMIT 1000",
 		Parameters: neoism.Props{"department": "(?i)" + searchTerm},
 		Result:     &[]PersonSummary{},
 	}
@@ -165,7 +165,7 @@ func (db *Database) LookupManager(query string) (results interface{}, err error)
 func (db *Database) LookupColleagues(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
+		Statement:  "MATCH (b:Person)<-[:MANAGES]-(c:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid ORDER BY a.position DESC, a.name LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
@@ -182,7 +182,7 @@ func (db *Database) LookupColleagues(query string) (results interface{}, err err
 func (db *Database) LookupReports(query string) (results interface{}, err error) {
 	val, _ := strconv.Atoi(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} AND a.position <> '' RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid LIMIT 100",
+		Statement:  "MATCH (b:Person)-[:MANAGES]->(a:Person) WHERE id(b) = {id} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid ORDER BY a.position DESC, a.name LIMIT 100",
 		Parameters: neoism.Props{"id": val},
 		Result:     &[]PersonSummary{},
 	}
