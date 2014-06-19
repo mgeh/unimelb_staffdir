@@ -40,6 +40,12 @@ func CleanNameDetails(b interface{}) staffdir.PersonDetail {
 	} else if len(nameTemp) > 2 {
 		k.Name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
 	}
+	if len(k.Phone) == 5 {
+		k.Phone = "903" + k.Phone
+	}
+	if k.Phone[:3] == "+61" {
+		k.Phone = k.Phone[3:]
+	}
 	return k
 }
 

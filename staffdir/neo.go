@@ -89,7 +89,7 @@ func (db *Database) SearchPeople(query string) (results interface{}, err error) 
 	var qtype string
 	qtype, query = db.ProcessQuery(query)
 	cq := neoism.CypherQuery{
-		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid ORDER BY a.position DESC, a.name LIMIT 50",
+		Statement:  "MATCH (a:Person) WHERE a." + qtype + " =~{name} RETURN a.name, a.position, a.department, a.phone, a.mobile, a.email, a.pref_name, a.gender, id(a) AS pid ORDER BY a.position DESC, a.name LIMIT 100",
 		Parameters: neoism.Props{"name": "(?i)" + query},
 		Result:     &[]PersonSummary{},
 	}
