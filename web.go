@@ -31,41 +31,47 @@ func LogFile(message string) {
 	log.Println(message)
 }
 
-// Clean names
-func CleanNameDetails(b interface{}) staffdir.PersonDetail {
-	k := b.(staffdir.PersonDetail)
-	nameTemp := strings.Split(k.Name, " ")
-	if len(k.PrefName) > 1 {
-		k.Name = fmt.Sprintf("%s %s", k.PrefName, nameTemp[len(nameTemp)-1])
-	} else if len(nameTemp) > 2 {
-		k.Name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
+// Clean phone numbers
+func CleanPhone(b string) string {
+	if len(b) > 0 {
+		if len(b) == 5 {
+			b = "903" + b
+		}
+		if b[:3] == "+61" {
+			b = b[3:]
+		}
 	}
-	if len(k.Phone) > 0 {
-		if len(k.Phone) == 5 {
-			k.Phone = "903" + k.Phone
-		}
-		if k.Phone[:3] == "+61" {
-			k.Phone = k.Phone[3:]
-		}
+	b = strings.TrimSpace(b)
+	return b
+}
+
+// Clean names
+func CleanName(name string, prefName string) string {
+	nameTemp := strings.Split(name, " ")
+	if len(prefName) > 1 {
+		name = fmt.Sprintf("%s %s", prefName, nameTemp[len(nameTemp)-1])
+	} else if len(nameTemp) > 2 {
+		name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
+	}
+	return name
+}
+
+func CleanDetails(b interface{}) staffdir.PersonDetail {
+	k := b.(staffdir.PersonDetail)
+	k.Name = CleanName(k.Name, k.PrefName)
+	k.Phone = CleanPhone(k.Phone)
+	if len(k.Mobile) > 0 {
+		k.Mobile = CleanPhone(k.Mobile)
 	}
 	return k
 }
 
-func CleanNameSummary(b interface{}) staffdir.PersonSummary {
+func CleanSummary(b interface{}) staffdir.PersonSummary {
 	k := b.(staffdir.PersonSummary)
-	nameTemp := strings.Split(k.Name, " ")
-	if len(k.PrefName) > 1 {
-		k.Name = fmt.Sprintf("%s %s", k.PrefName, nameTemp[len(nameTemp)-1])
-	} else if len(nameTemp) > 2 {
-		k.Name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
-	}
-	if len(k.Phone) > 0 {
-		if len(k.Phone) == 5 {
-			k.Phone = "903" + k.Phone
-		}
-		if k.Phone[:3] == "+61" {
-			k.Phone = k.Phone[3:]
-		}
+	k.Name = CleanName(k.Name, k.PrefName)
+	k.Phone = CleanPhone(k.Phone)
+	if len(k.Mobile) > 0 {
+		k.Mobile = CleanPhone(k.Mobile)
 	}
 	return k
 }
@@ -88,7 +94,7 @@ func ProcessSummaries(t interface{}) string {
 	var tempOut []staffdir.PersonSummary
 	if len(out) > 0 {
 		for _, b := range out {
-			k := CleanNameSummary(b)
+			k := CleanSummary(b)
 			tempOut = append(tempOut, k)
 		}
 		temp, _ = json.Marshal(tempOut)
@@ -104,7 +110,7 @@ func ProcessDetails(t interface{}) string {
 	var tempOut []staffdir.PersonDetail
 	if len(out) > 0 {
 		for _, b := range out {
-			k := CleanNameDetails(b)
+			k := CleanDetails(b)
 			tempOut = append(tempOut, k)
 		}
 		temp, _ = json.Marshal(tempOut)
@@ -176,7 +182,7 @@ func main() {
 		var tempOut []staffdir.PersonSummary
 		if len(out) > 0 {
 			for _, b := range out {
-				k := CleanNameSummary(b)
+				k := CleanSummary(b)
 				tempOut = append(tempOut, k)
 			}
 			temp, _ = json.Marshal(tempOut)
