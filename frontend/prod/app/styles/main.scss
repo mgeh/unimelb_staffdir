@@ -1,0 +1,409 @@
+$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
+
+@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
+
+// bower:scss
+@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
+// endbower
+
+
+.normalize p, .block-content p, .block-2-up > .col-sm-3 p, .block-4-up .col p, .normalize figcaption, .block-content figcaption, .block-2-up > .col figcaption, .block-4-up .col figcaption, .normalize ul, .block-content ul, .block-2-up > .col ul, .block-4-up .col ul, .normalize ol, .block-content ol, .block-2-up > .col ol, .block-4-up .col ol, body, .body, #simple-header .nav-minor a, .page-summary, #sub-nav a, .campaign_gallery .campaign figcaption, .legal-doc .subheading {
+font-size: 13px;
+line-height: 1.6875;
+font-weight: 400;
+}
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+margin: 0;
+padding: 0;
+border: 0;
+outline: 0;
+font-size: 100%;
+vertical-align: baseline;
+background: transparent;
+}
+
+.col-xs-12, .col-xs-11, .col-xs-10, .col-xs-9, .col-xs-8, .col-xs-7, .col-xs-6, .col-xs-5, .col-xs-4, .col-xs-3, .col-xs-2, .col-xs-1 {
+    float: inherit;
+}
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+float: left;
+}
+
+ul, ol {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+footer p, footer a, footer li {
+    font-size:0.89em;
+}
+
+html .contbox {
+    min-height: 5em;
+    margin-top: 1em;
+}
+
+.indlist a{
+    padding:0;
+    font-weight: 400;
+    font-size: 1.1em;
+}
+
+header.header { background-color: white; }
+@media screen and (max-width: 900px) {
+  .header .header-inner h1 { font-size: 150%; }
+  .no-logo a#g-global-menu-logo {display: none }
+  .header .header-inner { padding: 0px; }
+  .header .header-inner h1 { 
+    font-size: 130%;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    float: left;
+  }
+  form.search input.btn { display: none;}
+  form.search #query.form-control { 
+    min-width: 150px;
+    max-width: 900px;
+    padding: 0 1.5em;
+    
+    }
+  .community .questions h4 { float: none; margin-bottom: 10px;}
+
+}
+
+/* Global header and footer style fixes */
+body #g-header { height: 65px; }
+body #g-global-search #g-search-button { top: -2px; }
+#g-header button, 
+#g-header [role=button], 
+#g-header [type=button], 
+#g-header [type=submit] {
+  height: 19px;
+  line-height: 16px;
+}
+#g-header [role="button"]:hover { box-shadow: none; }
+.wrapper {
+  margin: 0 auto;
+  max-width: 1226px;
+  width: 100%;
+  
+}
+
+/* Unimelb footer styles */
+/*  Footer styles */
+.unimelb-footer {
+  display: block;
+  margin: 30px 0px -24px;
+  padding: 30px 0px;
+  clear: both;
+  color: #686868;
+  background: #f2f2f2;
+  line-height: 1.6em; 
+  overflow: hidden;
+}
+.unimelb-footer #local div { margin-bottom: 20px; }
+.unimelb-footer p.footertitle {
+  font-family: 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: bold;
+  clear: both;
+  font-size: 20px;
+  margin: 0px 0px 14px 20px;
+  color: #686868; 
+}
+.unimelb-footer h2, .unimelb-footer h3, .unimelb-footer h4 {
+  color: #686868;
+  margin: 0px;
+  padding: 0px;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 13px; 
+}
+.unimelb-footer a { color: #686868; }
+
+/* Put your CSS here */
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    margin: 0em;
+    padding: 0em;
+    position: relative;
+    border-top: 0.63em #0d3d6e solid;
+}
+
+.wrapper {
+  margin: 0 auto;
+  max-width: 1226px;
+  width: 100%;
+  
+}
+
+header h1 {
+    font-size: 2.6em;
+}
+
+section.bg-blue {
+  background-color: #DDE9F2;
+  padding: 3em 0 3em 0;
+}
+
+.section {
+  display: block;
+clear: both;
+vertical-align: top;
+}
+
+.block {
+  width: 100%;
+  float: left;
+}
+
+.panel span {
+    padding-right: 1em;
+    font-weight: 300;
+    font-size: 0.89em;
+}
+
+.panel span b {
+    font-weight: 500;
+}
+
+.dropdown-user {
+    float: right;
+    text-align: right;
+}
+
+.outer, .list-searchbox, .page-content {
+    overflow-x: hidden;
+}
+
+.outer, .list-searchbox, .page-content {
+    padding: 1em 0;
+}
+
+
+.container h1 {
+    font-size: 3em;
+}
+
+
+.outer {
+    background-color: #fff;
+}
+
+.filter-course-type {
+    float: left;
+    margin-bottom: 2rem;
+}
+.filter-course-type ul{
+    list-style-type: none;
+}
+
+.filter-course-type ul li{
+    padding-bottom: 0.5rem;
+    float: left;
+    margin-right: 2.5rem;
+    margin-top: 0.5rem;
+}
+
+.filter-course-type input {
+    margin-right: 0.1rem;
+    margin-top: 0;
+}
+
+.page-content {
+    position: relative;
+    padding-top: 2rem;
+}
+
+.list-group {
+    border-bottom: 1px #dae9ef solid;
+    width: 100%;
+}
+
+.list-description {
+    width: 23%;
+    margin-right: 2%;
+}
+.list-results {
+    width: 75%;
+    float:left;
+}
+
+.list-fresh  {
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.list-item {
+    margin-bottom: 0.5rem;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    width: 172px;
+}
+
+.list-group, .list-description, .list-results, .list-item {
+    float: left;
+    display: inline;
+}
+
+.list-item-copy {
+    padding: 1.5rem;
+}
+
+.inner {
+    background-color: #FFFFFF;
+    margin-right: 0.5rem;
+    min-height: 130px;
+    overflow: hidden;
+    color: #666666;
+}
+
+.inner:hover {
+    background-color: #E0E2DC;
+}
+
+.list-fresh a{
+    text-decoration: none;
+}
+
+.new_service {
+    border-bottom: 3px #DCE8EB solid;
+    color: #0088cc;
+}
+
+.report_issue{
+    border-bottom: 3px #F4DEC2 solid;
+    color: #AF6D62;
+}
+
+.change_service{
+    border-bottom: 3px #F8F4D7 solid;
+    color: #7E5D2A;
+}
+
+.training_service{
+    border-bottom: 3px #CFF09E solid;
+    color: #3B8686;
+}
+
+.list-type-new .inner {
+    background-color: #DCE8EB;
+    color: #0088cc;
+}
+
+.list-type-new .inner:hover {
+    background-color: #CBDBE0;
+}
+
+.list-type-report .inner{
+    background-color: #F4DEC2;
+    color: #AF6D62;
+}
+
+.list-type-report .inner:hover{
+    background-color: #F4C6A4;
+}
+
+.list-type-change .inner{
+    background-color: #F8F4D7;
+    color: #7E5D2A;
+}
+
+.list-type-change .inner:hover{
+    background-color: #F7EBBF;
+}
+
+.list-type-training .inner{
+    background-color: #CFF09E;
+    color: #3B8686;
+}
+
+.list-type-training .inner:hover{
+    background-color: #B4E189;
+}
+
+.filter-course-type span {
+    color: #333;
+    text-shadow: none;
+    padding: 0.2rem;
+    margin-top: 0.2rem;
+}
+
+.animate-enter, 
+.animate-leave
+{ 
+    -webkit-transition: 350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 350ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space:nowrap;
+} 
+ 
+.animate-leave.animate-leave-active,
+.animate-enter {
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+}
+ 
+.animate-enter.animate-enter-active, 
+.animate-leave {
+    opacity: 1;
+    width: 150px;
+    height: 30px;
+}
+
+.form-container {
+    padding: 1.5rem 2rem 2rem 3rem;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.05);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.05);
+    background-color: #fff;
+    border: 1px #ddd solid;
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 2em;
+    z-index: 2;
+}
+
+.form-control {
+    height: 45px;
+}
+
+.backbutton {
+    margin-bottom: 2rem;
+}
+
+.btn-submit {
+    width: 30%;
+    margin-top: 2rem;
+}
+
+input.ng-invalid.ng-dirty {
+    //background-color: #F7CCB7;
+}
+
+.loadbox {
+  background: url('/images/spinner.gif');
+  width: 50px;
+  height: 50px;
+  margin: auto;
+}

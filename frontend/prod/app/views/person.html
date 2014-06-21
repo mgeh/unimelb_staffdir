@@ -1,0 +1,137 @@
+
+<main role="main">
+<a ng-click="goback()">back to results</a>
+  <section class="section bg-white clearfix">
+    <div class="col-xs-12 contbox wrapper">
+      <div class="list-searchbox">
+        <div class="input-group">
+          <input id="searchfield" type="text" class="form-control" placeholder="e.g. name, email, phone number" ng-model="query" >
+          <span class="input-group-btn">
+            <button id="search" ng-click="search()" class="btn btn-lg btn-info" type="submit">
+            <span class="glyphicon glyphicon-search"></span></button>
+          </span>
+        </div>
+      </div>
+      <div ng-show="loading"><div class="loadbox"> </div></div>
+      <div class="alert alert-warning" ng-show="message">
+        <p>{{message}}</p>
+      </div>
+    </div>
+  </section>
+<section class="section bg-white clearfix" ng-if="data.person">
+    <div class="col-xs-12 contbox wrapper">
+<div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+    <div id="vly" class="panel-collapse collapse in user-infos">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12 col-md-2">
+            <img ng-src="images/{{data.person[0]['a.gender']}}.png" alt="placeholder avatar">
+          </div>
+          <div class="col-xs-6 col-md-5">
+            <h3 class="name">{{data.person[0]['a.name']}}</h3>
+            <h4 class="position">{{data.person[0]['a.position']}}</h4>
+            <div class="infoblock">
+              <p ng-if="data.person[0]['a.email']"><b>E-mail</b>: <a href="mailto:{{data.person[0]['a.email']}}">{{data.person[0]['a.email']}}</a></p>
+              <p ng-if="data.person[0]['a.phone']"><b>Phone</b>: <a href="tel:{{data.person[0]['a.phone']}}">{{data.person[0]['a.phone']}}</a></p>
+              <p ng-if="data.person[0]['a.mobile']"><b>Mobile</b>: <a href="tel:{{data.person[0]['a.mobile']}}">{{data.person[0]['a.mobile']}}</a></p>
+              <p ng-if="data.person[0]['a.loc_building']"><b>Location</b>: {{data.person[0]['a.loc_room']}} {{data.person[0]['a.loc_floor']}} {{data.person[0]['a.loc_building']}} {{data.person[0]['a.loc_campus']}}</p>
+            </div>
+
+            <div class="infoblock">
+              <p ng-if="data.person[0]['a.department']"><b>Department</b>: {{data.person[0]['a.department']}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-md-12">
+
+          <div ng-if="data.manager" class="infoblock">
+            <h4>Supervisor</h4>
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <th><a href="#/person/{{data.manager[0]['pid']}}">{{data.manager[0]['a.name']}}</a></th>
+                    <td>{{data.manager[0]['a.position']}}</td>
+                    <td><a href="mailto:{{data.manager[0]['a.email']}}" target="_blank">{{data.manager[0]['a.email']}}</a></td>
+                    <td><a href="tel:{{data.manager[0]['a.phone']}}">{{data.manager[0]['a.phone']}}</a></td>
+                    <td><a href="tel:{{data.manager[0]['a.mobile']}}">{{data.manager[0]['a.mobile']}}</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div ng-if="data.reports" class="infoblock">
+            <h4>Direct reports ({{data.reports.length}})</h4>
+            <table class="table table-condensed">
+               <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="report in data.reports">
+                  <th><a href="#/person/{{report['pid']}}">{{report['a.name']}}</a></th>
+                  <td>{{report['a.position']}}</td>
+                  <td><a href="mailto:{{report['a.email']}}" target="_blank">{{report['a.email']}}</a></td>
+                  <td><a href="tel:{{report['a.phone']}}">{{report['a.phone']}}</a></td>
+                  <td><a href="tel:{{report['a.mobile']}}">{{report['a.mobile']}}</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div ng-if="data.colleagues" class="infoblock">
+            <h4>Colleagues ({{data.colleagues.length}})</h4>
+            <table class="table table-condensed">
+              <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Mobile</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="colleague in data.colleagues">
+                  <th><a href="#/person/{{colleague['pid']}}">{{colleague['a.name']}}</a></th>
+                  <td>{{colleague['a.position']}}</td>
+                  <td><a href="mailto:{{colleague['a.email']}}" target="_blank">{{colleague['a.email']}}</a></td>
+                  <td><a href="tel:{{colleague['a.phone']}}">{{colleague['a.phone']}}</a></td>
+                  <td><a href="tel:{{colleague['a.mobile']}}">{{colleague['a.mobile']}}</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<script>
+$('.form-control').keyup(function (e) {
+    if (e.keyCode == 13) {
+        $("#search").click();
+    }
+});
+(function() {
+  document.getElementById('searchfield').focus();
+})();
+</script>

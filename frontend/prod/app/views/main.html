@@ -1,0 +1,59 @@
+<main role="search">
+  <section class="section bg-blue clearfix">
+    <div class="col-xs-12 contbox wrapper">
+      <div class="list-searchbox">
+          <div class="input-group">
+            <input id="searchfield" type="text" class="form-control searchbox" placeholder="e.g. name, email, phone number" ng-model="url">
+            <span class="input-group-btn">
+              <button id="search" ng-click="fetch()" class="btn btn-lg btn-primary" type="submit">
+              <span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div>
+        </div>
+    </div>
+  </section>
+  <section class="section bg-white clearfix"> 
+    <div class="col-xs-12 contbox wrapper">
+      <div ng-show="loading"><div class="loadbox"> </div></div>
+
+      <div class="alert alert-warning" ng-show="message">
+        <p>{{message}}</p>
+      </div>
+
+      <div class="row marketing" ng-show="data">
+        <div class="table-responsive">
+          <table class="table table-condensed" >
+            <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="person in data['data']">
+                  <th><a href="#/person/{{person['pid']}}">{{person['a.name']}}</a></th>
+                  <td>{{person['a.position']}}</td>
+                  <td>{{person['a.department']}}</td>
+                  <td><a href="mailto:{{person['a.email']}}" target="_blank">{{person['a.email']}}</a></td>
+                  <td><a href="tel:{{person['a.phone']}}">{{person['a.phone']}}</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+$('.form-control').keyup(function (e) {
+    if (e.keyCode == 13) {
+        $("#search").click();
+    }
+});
+(function() {
+  document.getElementById('searchfield').focus();
+})();
+</script>
