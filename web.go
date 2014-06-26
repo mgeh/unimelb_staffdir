@@ -46,19 +46,19 @@ func CleanPhone(b string) string {
 }
 
 // Clean names
-func CleanName(name string, prefName string) string {
+func CleanName(name string, prefName string, lastName string) string {
 	nameTemp := strings.Split(name, " ")
 	if len(prefName) > 1 {
-		name = fmt.Sprintf("%s %s", prefName, nameTemp[len(nameTemp)-1])
+		name = fmt.Sprintf("%s %s", prefName, lastName)
 	} else if len(nameTemp) > 2 {
-		name = fmt.Sprintf("%s %s", nameTemp[0], nameTemp[len(nameTemp)-1])
+		name = fmt.Sprintf("%s %s", nameTemp[0], lastName)
 	}
 	return name
 }
 
 func CleanDetails(b interface{}) staffdir.PersonDetail {
 	k := b.(staffdir.PersonDetail)
-	k.Name = CleanName(k.Name, k.PrefName)
+	k.Name = CleanName(k.Name, k.PrefName, k.LastName)
 	k.Phone = CleanPhone(k.Phone)
 	if len(k.Mobile) > 0 {
 		k.Mobile = CleanPhone(k.Mobile)
