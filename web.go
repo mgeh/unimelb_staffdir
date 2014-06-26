@@ -68,7 +68,7 @@ func CleanDetails(b interface{}) staffdir.PersonDetail {
 
 func CleanSummary(b interface{}) staffdir.PersonSummary {
 	k := b.(staffdir.PersonSummary)
-	k.Name = CleanName(k.Name, k.PrefName)
+	k.Name = CleanName(k.Name, k.PrefName, k.LastName)
 	k.Phone = CleanPhone(k.Phone)
 	if len(k.Mobile) > 0 {
 		k.Mobile = CleanPhone(k.Mobile)
