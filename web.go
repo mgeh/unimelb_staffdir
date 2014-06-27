@@ -35,7 +35,11 @@ func LogFile(message string) {
 func CleanPhone(b string) string {
 	if len(b) > 0 {
 		if len(b) == 5 {
-			b = "903" + b
+			if b[0] == 5 {
+				b = "903" + b
+			} else {
+				b = "834" + b
+			}
 		}
 		if b[:3] == "+61" {
 			b = b[3:]
