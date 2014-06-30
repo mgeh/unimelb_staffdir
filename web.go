@@ -45,12 +45,14 @@ func CleanPhone(b string) string {
 		if b[:3] == "+61" {
 			b = b[3:]
 		}
+		b = strings.TrimSpace(b)
+
+		if b[0] == 4 {
+			b = "0" + b
+		}
+		b = strings.Replace(b, " ", "", -1)
 	}
-	b = strings.TrimSpace(b)
-	if b[0] == 4 {
-		b = "0" + b
-	}
-	b = strings.Replace(b, " ", "", -1)
+
 	// regex := regexp.MustCompile(".{1,4}")
 	// regexp.Regexp.FindAllString(s, n)
 	// b = regex/.{1,4}/)
