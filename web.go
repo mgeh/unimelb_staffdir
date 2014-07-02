@@ -17,6 +17,7 @@ import (
 	"reflect"
 	// "regexp"
 	"runtime"
+	// "strconv"
 	"strings"
 )
 
@@ -36,7 +37,7 @@ func LogFile(message string) {
 func CleanPhone(b string) string {
 	if len(b) > 0 {
 		if len(b) == 5 {
-			if b[0] == 5 {
+			if b[0] == 56 {
 				b = "903" + b
 			} else {
 				b = "834" + b
@@ -47,16 +48,17 @@ func CleanPhone(b string) string {
 		}
 		b = strings.TrimSpace(b)
 
-		if b[0] == 4 {
-			b = "0" + b
+		if b[0] == 48 {
+			b = b[1:]
 		}
 		b = strings.Replace(b, " ", "", -1)
+
 	}
 
-	// regex := regexp.MustCompile(".{1,4}")
-	// regexp.Regexp.FindAllString(s, n)
-	// b = regex/.{1,4}/)
-	return b
+	// regex := regexp.MustCompile(".{1,3}")
+	// regex.FindAllString(s, n)
+	// // b = regex/.{1,4}/)
+	return "0" + b
 }
 
 // Clean email
@@ -184,8 +186,38 @@ func main() {
 		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
 	})
 
-	// process authentication
+	// lookup person
 	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		db.Connect(ENDPOINT)
+		SetHeaders(&res)
+		block := ""
+		if r.FormValue("q") != "" {
+			block = r.FormValue("q")
+		} else {
+			return 200, ""
+		}
+		results, err := db.SearchPeople(block)
+
+		if err != nil {
+			log.Fatalln("issue with results")
+		}
+		out := ProcessResults(results)
+
+		var temp []byte
+		var tempOut []staffdir.PersonSummary
+		if len(out) > 0 {
+			for _, b := range out {
+				k := CleanSummary(b)
+				tempOut = append(tempOut, k)
+			}
+			temp, _ = json.Marshal(tempOut)
+		}
+
+		return 200, fmt.Sprintf("{\"size\": %d, \"data\": %s}", len(out), string(temp))
+	})
+
+	// get suggested peopple
+	m.Get("/staffdir/suggestions", func(res http.ResponseWriter, r *http.Request) (int, string) {
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		block := ""
@@ -202,11 +234,18 @@ func main() {
 		out := ProcessResults(results)
 		fmt.Println(out)
 		var temp []byte
-		var tempOut []staffdir.PersonSummary
+		var tempOut []staffdir.Suggestion
 		if len(out) > 0 {
 			for _, b := range out {
 				k := CleanSummary(b)
-				tempOut = append(tempOut, k)
+				z := new(staffdir.Suggestion)
+				z.Name = k.Name
+				z.Department = k.Department
+				z.Phone = k.Phone
+				z.Email = k.Email
+				z.Id = k.Id
+
+				tempOut = append(tempOut, *z)
 			}
 			temp, _ = json.Marshal(tempOut)
 		}
