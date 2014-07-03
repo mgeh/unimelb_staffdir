@@ -15,7 +15,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
-	// "regexp"
+	"regexp"
 	"runtime"
 	// "strconv"
 	"strings"
@@ -36,29 +36,46 @@ func LogFile(message string) {
 // Clean phone numbers
 func CleanPhone(b string) string {
 	if len(b) > 0 {
+		b = strings.TrimSpace(b)
+		reg, err := regexp.Compile("[^0-9]+")
+		if err != nil {
+			log.Fatal(err)
+		}
+		b = reg.ReplaceAllString(b, "")
 		if len(b) == 5 {
 			if b[0] == 56 {
 				b = "903" + b
 			} else {
 				b = "834" + b
 			}
+		} else {
+			if len(b) > 8 {
+				b = b[8-len(b):]
+			}
 		}
-		if b[:3] == "+61" {
-			b = b[3:]
-		}
-		b = strings.TrimSpace(b)
-
-		if b[0] == 48 {
-			b = b[1:]
-		}
-		b = strings.Replace(b, " ", "", -1)
 
 	}
-
 	// regex := regexp.MustCompile(".{1,3}")
 	// regex.FindAllString(s, n)
-	// // b = regex/.{1,4}/)
-	return "0" + b
+	// b = regex/.{1,4}/)
+	return "(03) " + b
+}
+
+// Clean mobile numbers
+func CleanMobile(b string) string {
+	if len(b) > 0 {
+		b = strings.TrimSpace(b)
+		reg, err := regexp.Compile("[^0-9]+")
+		if err != nil {
+			log.Fatal(err)
+		}
+		b = reg.ReplaceAllString(b, "")
+
+	}
+	// regex := regexp.MustCompile(".{1,3}")
+	// regex.FindAllString(s, n)
+	// b = regex/.{1,4}/)
+	return b
 }
 
 // Clean email
@@ -84,7 +101,7 @@ func CleanDetails(b interface{}) staffdir.PersonDetail {
 	k.Name = CleanName(k.Name, k.PrefName, k.LastName)
 	k.Phone = CleanPhone(k.Phone)
 	if len(k.Mobile) > 0 {
-		k.Mobile = CleanPhone(k.Mobile)
+		k.Mobile = CleanMobile(k.Mobile)
 	}
 	k.Email = CleanEmail(k.Email)
 	return k
@@ -95,7 +112,7 @@ func CleanSummary(b interface{}) staffdir.PersonSummary {
 	k.Name = CleanName(k.Name, k.PrefName, k.LastName)
 	k.Phone = CleanPhone(k.Phone)
 	if len(k.Mobile) > 0 {
-		k.Mobile = CleanPhone(k.Mobile)
+		k.Mobile = CleanMobile(k.Mobile)
 	}
 	k.Email = CleanEmail(k.Email)
 	return k
