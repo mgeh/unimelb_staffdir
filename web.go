@@ -35,8 +35,8 @@ func LogFile(message string) {
 
 // Clean phone numbers
 func CleanPhone(b string) string {
-	if len(b) > 0 {
-		b = strings.TrimSpace(b)
+	b = strings.TrimSpace(b)
+	if len(b) > 1 {
 		reg, err := regexp.Compile("[^0-9]+")
 		if err != nil {
 			log.Fatal(err)
@@ -50,7 +50,7 @@ func CleanPhone(b string) string {
 			}
 		} else {
 			if len(b) > 8 {
-				b = b[8-len(b):]
+				b = b[len(b)-8:]
 			}
 		}
 
@@ -58,12 +58,12 @@ func CleanPhone(b string) string {
 	// regex := regexp.MustCompile(".{1,3}")
 	// regex.FindAllString(s, n)
 	// b = regex/.{1,4}/)
-	return "(03) " + b
+	return "03 " + b
 }
 
 // Clean mobile numbers
 func CleanMobile(b string) string {
-	if len(b) > 0 {
+	if len(b) > 1 {
 		b = strings.TrimSpace(b)
 		reg, err := regexp.Compile("[^0-9]+")
 		if err != nil {
