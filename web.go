@@ -165,7 +165,7 @@ func ProcessDetails(t interface{}) string {
 func CheckIp(authlist *[]string, res http.ResponseWriter, req *http.Request) bool {
 	ip := strings.Split(req.RemoteAddr, ":")
 	for _, b := range *authlist {
-		if ip[0] == b {
+		if ip[0][:len(b)] == b {
 			return true
 		}
 	}
