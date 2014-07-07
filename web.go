@@ -53,12 +53,12 @@ func CleanPhone(b string) string {
 				b = b[len(b)-8:]
 			}
 		}
-
+		b = "03 " + b
 	}
 	// regex := regexp.MustCompile(".{1,3}")
 	// regex.FindAllString(s, n)
 	// b = regex/.{1,4}/)
-	return "03 " + b
+	return b
 }
 
 // Clean mobile numbers
@@ -70,7 +70,9 @@ func CleanMobile(b string) string {
 			log.Fatal(err)
 		}
 		b = reg.ReplaceAllString(b, "")
-
+		if len(b) > 9 {
+			b = "0" + b[len(b)-9:]
+		}
 	}
 	// regex := regexp.MustCompile(".{1,3}")
 	// regex.FindAllString(s, n)
@@ -160,6 +162,20 @@ func ProcessDetails(t interface{}) string {
 	return string(temp)
 }
 
+func CheckIp(authlist *[]string, res http.ResponseWriter, req *http.Request) bool {
+	ip := strings.Split(req.RemoteAddr, ":")
+	for _, b := range *authlist {
+		if ip[0] == b {
+			return true
+		}
+	}
+
+	fmt.Println("unauthorised access attempt from:", req.RemoteAddr)
+	http.Error(res, "Unauthorized", http.StatusUnauthorized)
+	return false
+
+}
+
 // preflight headers
 
 func SetHeaders(res *http.ResponseWriter) *http.ResponseWriter {
@@ -173,6 +189,7 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	ENDPOINT := os.Getenv("NEO4J_URL")
+	AUTHLIST := strings.Split(os.Getenv("AUTHORISED_IPS"), ",")
 
 	m := martini.Classic()
 	fmt.Println("Initialising")
@@ -180,6 +197,9 @@ func main() {
 	db.Connect(ENDPOINT)
 
 	m.Get("/staffdir/department/:query", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		if params["query"] == "" {
@@ -205,6 +225,9 @@ func main() {
 
 	// lookup person
 	m.Get("/staffdir/person", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		block := ""
@@ -235,6 +258,9 @@ func main() {
 
 	// get suggested peopple
 	m.Get("/staffdir/suggestions", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		block := ""
@@ -271,6 +297,9 @@ func main() {
 	})
 
 	m.Get("/staffdir/manager/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		if params["email"] == "" {
@@ -296,6 +325,9 @@ func main() {
 	})
 
 	m.Get("/staffdir/colleagues/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		if params["email"] == "" {
@@ -321,6 +353,9 @@ func main() {
 	})
 
 	m.Get("/staffdir/reports/:email", func(params martini.Params, res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		if params["email"] == "" {
@@ -346,6 +381,9 @@ func main() {
 	})
 
 	m.Get("/staffdir/details", func(res http.ResponseWriter, r *http.Request) (int, string) {
+		if ok := CheckIp(&AUTHLIST, res, r); !ok {
+			return 401, ""
+		}
 		db.Connect(ENDPOINT)
 		SetHeaders(&res)
 		block := ""
