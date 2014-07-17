@@ -67,7 +67,6 @@ class uploader():
              l_name: "%s",\
              pref_name: "%s",\
              title: "%s",\
-             dob: "%s",\
              gender: "%s",\
              email: "%s",\
              department: "", \
@@ -80,10 +79,9 @@ class uploader():
              loc_room: "%s",\
              phone: "%s", \
              mobile: "%s",\
-             employee_number: "%s",\
-             billing_code: "%s",\
-             start_date: "%s"})' % (name, kwargs[6].title(), kwargs[7].title(), kwargs[8].title(), kwargs[13].title(), kwargs[4].title(), kwargs[5], kwargs[9], kwargs[3], kwargs[21].title(), kwargs[24], 
-             kwargs[18], kwargs[34], kwargs[35], kwargs[36], kwargs[37], kwargs[31], kwargs[33], kwargs[1], kwargs[38], kwargs[11])))
+             pID: "%s",\
+             billing_code: "%s"})' % (name, kwargs[6].title(), kwargs[7].title(), kwargs[8].title(), kwargs[13].title(), kwargs[4].title(), kwargs[9], kwargs[3], kwargs[21].title(), kwargs[24], 
+             kwargs[18], kwargs[34], kwargs[35], kwargs[36], kwargs[37], kwargs[31], kwargs[33], kwargs[1], kwargs[38])))
 
     def add_fa(self, fa):
         '''Insert new record into db'''
@@ -91,7 +89,7 @@ class uploader():
 
     def add_reportingline(self, p_from, p_to):
         '''Insert reporting line relationship'''
-        self.batch_cypher(self.write_batch, ('MATCH (a:Person), (b:Person) WHERE a.employee_number="%s" and b.employee_number="%s" CREATE (a)-[:MANAGES]->(b)' % (p_from, p_to)))
+        self.batch_cypher(self.write_batch, ('MATCH (a:Person), (b:Person) WHERE a.pID="%s" and b.pID="%s" CREATE (a)-[:MANAGES]->(b)' % (p_from, p_to)))
 
     def add_index(self, value):
         '''Create index'''
@@ -109,29 +107,30 @@ class uploader():
 if __name__ == '__main__':
 
     dbpath = 'http://localhost:7474/db/data'
-    report_date = '2014-05-22'
+    report_date = '2014-07-11'
     loader = uploader(dbpath, report_date)
 
     def feed_data():
         the_list = {}
         temp = []
-        with open('may_2014.csv', newline='', encoding="ISO-8859-1") as csvfile:
+        with open('data/july_2014.csv', newline='', encoding="ISO-8859-1") as csvfile:
             data = csv.reader(csvfile)
             try:
                 for row in data:
                     print(row)
-                    if row[1] in the_list:
-                        temp = the_list[row[1]][0]
-                    the_list[row[1]] = row
-                    if temp:
-                        the_list[row[1]].append(temp)
-                    temp = []
+                    if "unimelb" in row[3]:
+                        if row[1] in the_list:
+                            temp = the_list[row[1]][0]
+                        the_list[row[1]] = row
+                        if temp:
+                            the_list[row[1]].append(temp)
+                        temp = []
 
-                    if row[19] not in the_list:
-                        the_list[row[19]] = [[],]
-                    if type(the_list[row[19]][-1]) == str:
-                        the_list[row[19]].append([])
-                    the_list[row[19]][-1].append(row[1])
+                        if row[19] not in the_list:
+                            the_list[row[19]] = [[],]
+                        if type(the_list[row[19]][-1]) == str:
+                            the_list[row[19]].append([])
+                        the_list[row[19]][-1].append(row[1])
             except UnicodeDecodeError as err:
                 print("UnicodeDecodeError {0}".format(err)) 
                 sys.exit(1)
@@ -143,7 +142,7 @@ if __name__ == '__main__':
     def update_phones():
         depcodes = []
         pattern = re.compile('[\W_]+')
-        with open('activedir_2013.csv', newline='') as csvfile:
+        with open('data/activedir_2013.csv', newline='') as csvfile:
                 data = csv.reader(csvfile)
                 try:
                     for row in data:
@@ -171,7 +170,7 @@ if __name__ == '__main__':
         loader.batch_flush(loader.write_batch)
 
     def add_relationship(the_list):
-        loader.add_index('employee_number')
+        loader.add_index('pID')
         for person in the_list:
             if type(the_list[person][-1]) is list and len(the_list[person]) > 1:
                 for each in the_list[person][-1]:
@@ -186,7 +185,7 @@ if __name__ == '__main__':
 
     def add_departments():
         depcodes = []
-        with open('department_codes.csv', newline='') as csvfile:
+        with open('data/department_codes.csv', newline='') as csvfile:
                 data = csv.reader(csvfile)
                 try:
                     for row in data:
@@ -199,7 +198,10 @@ if __name__ == '__main__':
         loader.batch_flush(loader.write_batch)
 
 
-    feed_data()
+    def anon_records():
+        instances = [("019438", "vc@unimelb.edu.au"), ("373033", "dvc-research@unimelb.edu.au"), ]
+
+    #feed_data()
     update_phones()
 
 

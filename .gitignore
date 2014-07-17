@@ -4,3 +4,4 @@ staffdir/temp
 Dockerfile
 *.zip
 dist
+data
