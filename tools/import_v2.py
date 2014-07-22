@@ -67,7 +67,6 @@ class uploader():
              l_name: "%s",\
              pref_name: "%s",\
              title: "%s",\
-             gender: "%s",\
              email: "%s",\
              department: "", \
              position: "%s",\
@@ -80,7 +79,7 @@ class uploader():
              phone: "%s", \
              mobile: "%s",\
              pID: "%s",\
-             billing_code: "%s"})' % (name, kwargs[6].title(), kwargs[7].title(), kwargs[8].title(), kwargs[13].title(), kwargs[4].title(), kwargs[9], kwargs[3], kwargs[21].title(), kwargs[24], 
+             billing_code: "%s"})' % (name, kwargs[6].title(), kwargs[7].title(), kwargs[8].title(), kwargs[13].title(), kwargs[4].title(), kwargs[3], kwargs[21].title(), kwargs[24], 
              kwargs[18], kwargs[34], kwargs[35], kwargs[36], kwargs[37], kwargs[31], kwargs[33], kwargs[1], kwargs[38])))
 
     def add_fa(self, fa):
@@ -107,13 +106,13 @@ class uploader():
 if __name__ == '__main__':
 
     dbpath = 'http://localhost:7474/db/data'
-    report_date = '2014-07-11'
+    report_date = '2014-07-22'
     loader = uploader(dbpath, report_date)
 
     def feed_data():
         the_list = {}
         temp = []
-        with open('data/july_2014.csv', newline='', encoding="ISO-8859-1") as csvfile:
+        with open('data/august_2014.csv', newline='', encoding="ISO-8859-1") as csvfile:
             data = csv.reader(csvfile)
             try:
                 for row in data:
@@ -201,7 +200,8 @@ if __name__ == '__main__':
     def anon_records():
         instances = [("019438", "vc@unimelb.edu.au"), ("373033", "dvc-research@unimelb.edu.au"), ]
 
-    #feed_data()
-    update_phones()
+    # feed_data()
+    # update_phones()
+    anon_records()
 
 
