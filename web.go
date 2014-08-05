@@ -205,14 +205,19 @@ func main() {
 			return 501, fmt.Sprintf("{\"status\": \"%s\"}", status)
 		}
 
-		cmd := exec.Command("aws", "s3", "sync", S3_LOC, LOCAL_LOC)
+		cmd := exec.Command("service", "staffdir", "start")
+		if err := cmd.Run(); err != nil {
+			status = "Failed to stop staffdir service"
+		}
+
+		cmd = exec.Command("aws", "s3", "sync", S3_LOC, LOCAL_LOC)
 		if err := cmd.Run(); err != nil {
 			log.Println(err)
 			status = "Failed to exec AWS cli s3 sync"
 		} else {
-			cmd = exec.Command("service", "staffdir", "restart")
+			cmd = exec.Command("service", "staffdir", "start")
 			if err := cmd.Run(); err != nil {
-				status = "Failed to restart staffdir service"
+				status = "Failed to start staffdir service"
 			}
 		}
 		return 200, fmt.Sprintf("{\"status\": \"%s\"}", status)
