@@ -6,6 +6,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/codegangsta/martini"
@@ -205,16 +206,22 @@ func main() {
 			return 501, fmt.Sprintf("{\"status\": \"%s\"}", status)
 		}
 
-		cmd := exec.Command("service", "staffdir", "start")
+		cmd = exec.Command("/usr/local/bin/aws", "s3", "sync", S3_LOC, LOCAL_LOC)
+		var out bytes.Buffer
+		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {
-			status = "Failed to stop staffdir service"
-		}
-
-		cmd = exec.Command("aws", "s3", "sync", S3_LOC, LOCAL_LOC)
-		if err := cmd.Run(); err != nil {
-			log.Println(err)
+			LogFile(fmt.Sprintf("%s", err))
 			status = "Failed to exec AWS cli s3 sync"
+			LogFile(fmt.Sprintf("%s", out))
 		} else {
+			cmd := exec.Command("service", "staffdir", "stop")
+			if err := cmd.Run(); err != nil {
+				status = "Failed to stop staffdir service"
+			}
+			cmd = exec.Command("ln", "-s", "/usr/share/nginx/www/web", "/usr/local/bin/staffdir_api")
+			if err := cmd.Run(); err != nil {
+				status = "Failed to replace api sym links"
+			}
 			cmd = exec.Command("service", "staffdir", "start")
 			if err := cmd.Run(); err != nil {
 				status = "Failed to start staffdir service"
