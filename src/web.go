@@ -191,7 +191,9 @@ func main() {
 	ENDPOINT := os.Getenv("NEO4J_URL")
 	S3_LOC := os.Getenv("S3_LOC")
 	LOCAL_LOC := os.Getenv("LOCAL_LOC")
-
+	AWS_BIN := "/usr/local/bin/aws"
+	if len(os.Getenv("AWS_BIN")) < 1 { AWS_BIN = os.Getenv("AWS_BIN") }
+	
 	m := martini.Classic()
 	fmt.Println("Initialising")
 	db := new(staffdir.Database)
@@ -206,7 +208,7 @@ func main() {
 			return 501, fmt.Sprintf("{\"status\": \"%s\"}", status)
 		}
 
-		cmd = exec.Command("/usr/local/bin/aws", "s3", "sync", S3_LOC, LOCAL_LOC)
+		cmd := exec.Command(AWS_BIN, "s3", "sync", S3_LOC, LOCAL_LOC)
 		var out bytes.Buffer
 		cmd.Stdout = &out
 		if err := cmd.Run(); err != nil {

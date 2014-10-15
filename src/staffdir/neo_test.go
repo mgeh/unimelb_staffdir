@@ -8,12 +8,13 @@ import (
 	"testing"
 )
 
+//not sure if this data is used - M GEHLING 15-Oct-2014
 const (
 	//ENDPOINT   = "http://weapon.its.unimelb.edu.au/db/data"
-	PERSON     = "Val"
-	EMAIL      = "tania.elliott@unimelb.edu.au"
-	DEPARTMENT = "ITS"
-	PHONE      = "7966"
+	PERSON     = "Eliana Hruby"
+	EMAIL      = "eliana.hruby@unimelb.edu.au" 
+	DEPARTMENT = "Senior Vice-Principal"
+	PHONE      = "55203"
 )
 
 // TestConnectNeo checks the Neo4j DB connection functionality
@@ -53,9 +54,9 @@ func TestSearchPeople(t *testing.T) {
 
 	// Test results
 	tests := map[string]string{
-		"Val L": "Val Lyashov",
-		"8632":  "Val Lyashov",
-		"val.lyashov@unimelb.edu": "Val Lyashov",
+		"Hrub": "Eliana Hruby",
+		"55203":  "Eliana Hruby",
+		"eliana.hruby@unimelb.edu.au": "Eliana Hruby",
 	}
 	for in, out := range tests {
 		results, err := db.SearchPeople(in)
@@ -84,9 +85,9 @@ func TestProcessName(t *testing.T) {
 
 	// Test results
 	tests := map[string]string{
-		"val l":  "val.* l.*",
-		"val":    "(^|.* )val.*",
-		"lyasho": "(^|.* )lyasho.*",
+		"eliana h":  "eliana.* h.*",
+		"eliana":    "(^|.* )eliana.*",
+		"hrub": "(^|.* )hrub.*",
 	}
 
 	for a, b := range tests {
